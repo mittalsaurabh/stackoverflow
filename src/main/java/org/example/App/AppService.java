@@ -64,6 +64,37 @@ public class AppService {
         return questionService.addQuestion(newQuestion);
     }
 
+    public Question updateQuestion(Long questionId, QuestionRow question) {
+        Question oldQuestion = questionService.getQuestionById(questionId);
+        if (oldQuestion == null) {
+            throw new IllegalArgumentException("Question not found by this id : " + questionId);
+        }
+        User author = userService.getUserById(question.getAuthorId());
+        if (author == null) {
+            throw new AuthorNotFoundException("Author not found by this id : " + question.getAuthorId());
+        }
+
+        if (!oldQuestion.getCreator().getId().equals(author.getId())) {
+            throw new IllegalArgumentException("Only the author of the question can update it");
+        }
+
+        List<Tag> tags = new ArrayList<>();
+        for (String tagName : question.getTags()) {
+            Tag tag = tagService.getTagByName(tagName);
+            if (tag == null) {
+                tag = new Tag(tagName);
+                tagService.addTag(tag);
+            }
+            tags.add(tag);
+        }
+        oldQuestion.updateText(question.getText());
+        oldQuestion.setTitle(question.getTitle());
+        oldQuestion.setTags(tags);
+        return questionService.addQuestion(oldQuestion);
+    }
+
+
+
     public List<Question> getQuestionsByTag(String tagName) {
         Tag tag = tagService.getTagByName(tagName);
         if(tag == null) {
@@ -148,18 +179,20 @@ public class AppService {
         return answerService.addAnswer(answer);
     }
 
-//    public Question downVoteQuestion(Long id, Long userId) {
-//        Question question = questionService.getQuestionById(id);
-//        if (question == null) {
-//            throw new IllegalArgumentException("Question not found by this id : " + id);
-//        }
-//        User user = userService.getUserById(userId);
-//        if (user == null) {
-//            throw new AuthorNotFoundException("Author not found by this id : " + userId);
-//        }
-//        question.downVote(user);
-//        return questionService.addQuestion(question);
-//    }
+    public Question addTag(Long id, String tag) {
+        Question question = questionService.getQuestionById(id);
+        if (question == null) {
+            throw new IllegalArgumentException("Question not found by this id : " + id);
+        }
+        Tag newTag = tagService.getTagByName(tag);
+        if (newTag == null) {
+            newTag = new Tag(tag);
+            tagService.addTag(newTag);
+        }
+        question.addTag(newTag);
+        return questionService.addQuestion(question);
+    }
+
 
 
 

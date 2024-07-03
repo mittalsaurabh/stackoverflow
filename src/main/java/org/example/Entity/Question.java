@@ -67,4 +67,8 @@ public class Question extends TextBasedEntity {
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
 }
