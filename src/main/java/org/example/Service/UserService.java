@@ -1,6 +1,7 @@
 package org.example.Service;
 
 import org.example.Entity.User;
+import org.example.Exception.AuthorNotFoundException;
 import org.example.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,13 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User validateUser(long id) {
+        User author = getUserById(id);
+        if (author == null) {
+            throw new AuthorNotFoundException("Author not found by this id : " + id);
+        }
+        return author;
     }
 }

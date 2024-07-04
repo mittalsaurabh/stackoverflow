@@ -1,29 +1,26 @@
 package org.example.Controller;
 
-import org.example.App.AppService;
+import org.example.App.Facade;
 import org.example.Entity.Comment;
 import org.example.Row.CommentRow;
-import org.example.Service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
 
 
-    private final AppService appService;
+    private final Facade facade;
 
     @Autowired
-    public CommentController( AppService appService) {
-        this.appService = appService;
+    public CommentController( Facade facade) {
+        this.facade = facade;
     }
 
     @PostMapping
     public Comment addComment(@RequestBody CommentRow comment) {
-        return appService.addComment(comment);
+        return facade.addComment(comment);
     }
 
 //    @GetMapping

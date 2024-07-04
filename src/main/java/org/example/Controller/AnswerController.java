@@ -1,8 +1,7 @@
 package org.example.Controller;
 
-import org.example.App.AppService;
+import org.example.App.Facade;
 import org.example.Entity.Answer;
-import org.example.Entity.Question;
 import org.example.Row.AnswerRow;
 import org.example.Row.VoteRequest;
 import org.springframework.web.bind.annotation.*;
@@ -10,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/answers")
 public class AnswerController {
-    private final AppService appService;
+    private final Facade facade;
 
-    public AnswerController(AppService appService) {
-        this.appService = appService;
+    public AnswerController(Facade facade) {
+        this.facade = facade;
     }
 
     @PostMapping
     public Answer addAnswer(@RequestBody AnswerRow answer) {
-        return appService.addAnswer(answer);
+        return facade.addAnswer(answer);
     }
 
     @PostMapping("{id}/vote")
     public Answer vote(@PathVariable Long id, @RequestBody VoteRequest userId){
-        return appService.voteAnswer(id, userId);
+        return facade.voteAnswer(id, userId);
     }
 }

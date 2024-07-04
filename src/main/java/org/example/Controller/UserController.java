@@ -1,6 +1,6 @@
 package org.example.Controller;
 
-import org.example.App.AppService;
+import org.example.App.Facade;
 import org.example.Entity.User;
 import org.example.Service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +11,19 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private final AppService appService;
+    private final Facade facade;
 
-    public UserController(UserService userService, AppService appService) {
-        this.appService = appService;
+    public UserController(UserService userService, Facade facade) {
+        this.facade = facade;
     }
 
     @PostMapping
     public User addUser(@RequestBody User user) {
-        return appService.addUser(user);
+        return facade.addUser(user);
     }
 
     @GetMapping("/getAllUsers")
     public List<User> getUsers() {
-        return appService.getUsers();
+        return facade.getUsers();
     }
 }

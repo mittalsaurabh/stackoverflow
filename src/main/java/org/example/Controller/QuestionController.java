@@ -1,6 +1,6 @@
 package org.example.Controller;
 
-import org.example.App.AppService;
+import org.example.App.Facade;
 import org.example.Entity.Question;
 import org.example.Row.QuestionRow;
 import org.example.Row.VoteRequest;
@@ -13,17 +13,17 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final AppService appService;
+    private final Facade facade;
 
     @Autowired
-    public QuestionController(AppService appService) {
-        this.appService = appService;
+    public QuestionController(Facade facade) {
+        this.facade = facade;
     }
 
     @PostMapping
     public Question addQuestion(@RequestBody QuestionRow question) throws IllegalArgumentException {
         try {
-            return appService.addQuestion(question);
+            return facade.addQuestion(question);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -32,7 +32,7 @@ public class QuestionController {
     @PatchMapping("/{id}/update")
     public Question updateQuestion(@PathVariable long id,  @RequestBody QuestionRow question) {
         try {
-            return appService.updateQuestion(id, question);
+            return facade.updateQuestion(id, question);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -40,12 +40,12 @@ public class QuestionController {
 
     @GetMapping("/tag")
     public List<Question> getQuestionsByTag(@RequestParam String tag) {
-        return appService.getQuestionsByTag(tag);
+        return facade.getQuestionsByTag(tag);
     }
 
     @PostMapping("/{id}/vote")
     public Question vote(@PathVariable Long id, @RequestBody VoteRequest userId){
-        return appService.voteQuestion(id, userId);
+        return facade.voteQuestion(id, userId);
     }
 
 
@@ -53,7 +53,7 @@ public class QuestionController {
 
     @PostMapping("/{id}/tag")
     public Question addTag(@PathVariable Long id, @RequestBody String tag) {
-        return appService.addTag(id, tag);
+        return facade.addTag(id, tag);
     }
 
 

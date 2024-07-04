@@ -75,6 +75,10 @@ public abstract class TextBasedEntity {
         this.lastUpdated = LocalDate.now();
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public int getUpVoteCount() {
         return upVotes.size();
     }
