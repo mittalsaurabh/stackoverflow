@@ -34,8 +34,6 @@ public class QuestionController {
         return facade.updateQuestion(id, questionRow);
     }
 
-
-
     @GetMapping("/tag")
     public List<Question> getQuestionsByTag(@RequestParam String tag) {
         return facade.getQuestionsByTag(tag);
