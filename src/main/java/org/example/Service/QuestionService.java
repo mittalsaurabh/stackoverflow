@@ -4,6 +4,7 @@ import org.example.Entity.Question;
 import org.example.Entity.Tag;
 import org.example.Entity.User;
 import org.example.Enums.VoteType;
+import org.example.Exception.QuestionNotFoundException;
 import org.example.Repository.QuestionRepository;
 import org.example.Row.QuestionRow;
 import org.example.Row.VoteRequest;
@@ -19,14 +20,15 @@ public class QuestionService {
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
+
     public Question addQuestion(QuestionRow question, User author, List<Tag> tags) {
-        Question newQuestion = new Question(question.getText() , author , question.getTitle(),tags);
+        Question newQuestion = new Question(question.getText(), author, question.getTitle(), tags);
         return questionRepository.save(newQuestion);
     }
 
-    public Question voteQuestion(long id, User user,  VoteRequest voteRequest ) {
+    public Question voteQuestion(long id, User user, VoteRequest voteRequest) {
         Question question = validateQuestion(id);
-        if(voteRequest.getVoteType() == VoteType.UPVOTE) {
+        if (voteRequest.getVoteType() == VoteType.UPVOTE) {
             question.upVote(user);
         } else {
             question.downVote(user);
@@ -34,7 +36,7 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public Question updateQuestion(Long questionId, QuestionRow question, User author, List<Tag> tags){
+    public Question updateQuestion(Long questionId, QuestionRow question, User author, List<Tag> tags) {
         Question oldQuestion = validateQuestion(questionId);
         if (!oldQuestion.getCreator().getId().equals(author.getId())) {
             throw new IllegalArgumentException("Only the author of the question can update it");
@@ -45,7 +47,7 @@ public class QuestionService {
         return questionRepository.save(oldQuestion);
     }
 
-    public Question addTag(long id, Tag tag){
+    public Question addTag(long id, Tag tag) {
         Question question = validateQuestion(id);
         question.addTag(tag);
         return questionRepository.save(question);
@@ -62,7 +64,7 @@ public class QuestionService {
     public Question validateQuestion(long id) {
         Question question = getQuestionById(id);
         if (question == null) {
-            throw new IllegalArgumentException("Question not found by this id : " + id);
+            throw new QuestionNotFoundException("Question not found by this id : " + id);
         }
         return question;
     }

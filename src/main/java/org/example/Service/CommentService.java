@@ -24,22 +24,23 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public Comment addCommentOnQuestion(CommentRow comment, User user, Question question) throws IllegalArgumentException{
-        if(comment.getQuestionId() != null && comment.getAnswerId() != null) {
+    public Comment addCommentOnQuestion(CommentRow comment, User user, Question question) throws IllegalArgumentException {
+        if (comment.getQuestionId() != null && comment.getAnswerId() != null) {
             throw new IllegalArgumentException("Comment can have a questionId or an answerId, not both");
         }
-        if(comment.getQuestionId() == null && comment.getAnswerId() == null) {
+        if (comment.getQuestionId() == null && comment.getAnswerId() == null) {
             throw new IllegalArgumentException("Comment must have a questionId or an answerId");
         }
         return commentRepository.save(new Comment(comment.getText(), user, question));
 
 
     }
-    public Comment addCommentOnAnswer(CommentRow comment, User user, Answer answer) throws IllegalArgumentException{
-        if(comment.getQuestionId() != null && comment.getAnswerId() != null) {
+
+    public Comment addCommentOnAnswer(CommentRow comment, User user, Answer answer) throws IllegalArgumentException {
+        if (comment.getQuestionId() != null && comment.getAnswerId() != null) {
             throw new IllegalArgumentException("Comment can have a questionId or an answerId, not both");
         }
-        if(comment.getQuestionId() == null && comment.getAnswerId() == null) {
+        if (comment.getQuestionId() == null && comment.getAnswerId() == null) {
             throw new IllegalArgumentException("Comment must have a questionId or an answerId");
         }
         return commentRepository.save(new Comment(comment.getText(), user, answer));

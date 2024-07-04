@@ -32,9 +32,10 @@ public class TagService {
         }
         return tags;
     }
-    public Tag getTag(String tagName){
+
+    public Tag getTag(String tagName) {
         Tag tag = getTagByName(tagName);
-        if(tag == null){
+        if (tag == null) {
             tag = new Tag(tagName);
             addTag(tag);
         }

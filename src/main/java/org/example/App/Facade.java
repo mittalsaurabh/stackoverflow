@@ -2,6 +2,7 @@ package org.example.App;
 
 import org.example.Entity.*;
 import org.example.Exception.AuthorNotFoundException;
+import org.example.Exception.QuestionNotFoundException;
 import org.example.Row.AnswerRow;
 import org.example.Row.CommentRow;
 import org.example.Row.QuestionRow;
@@ -29,11 +30,11 @@ public class Facade {
         this.tagService = tagService;
         this.answerService = answerService;
     }
-    
+
     public User addUser(User user) {
         return userService.addUser(user);
     }
-    
+
     public List<User> getUsers() {
         return userService.getUsers();
     }
@@ -51,12 +52,12 @@ public class Facade {
         return questionService.updateQuestion(questionId, question, author, tags);
     }
 
-    public List<Question> getQuestionsByTag(String tagName) {
+    public List<Question> getQuestionsByTag(String tagName) throws IllegalArgumentException {
         Tag tag = tagService.getTag(tagName);
         return questionService.getQuestionsByTag(tag);
     }
 
-    public Answer addAnswer(AnswerRow answer) {
+    public Answer addAnswer(AnswerRow answer) throws QuestionNotFoundException, AuthorNotFoundException{
         Question question = questionService.validateQuestion(answer.getQuestionId());
         User author = userService.validateUser(answer.getAuthorId());
         Answer newAnswer = new Answer(answer.getText(), author, question, answer.getMedia());
@@ -65,7 +66,7 @@ public class Facade {
 
     public Comment addComment(CommentRow comment) {
         User author = userService.validateUser(comment.getAuthorId());
-        if(comment.getQuestionId() != null){
+        if (comment.getQuestionId() != null) {
             Question question = questionService.validateQuestion(comment.getQuestionId());
             return commentService.addCommentOnQuestion(comment, author, question);
         }
