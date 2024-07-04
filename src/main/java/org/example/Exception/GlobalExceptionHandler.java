@@ -1,34 +1,28 @@
-package org.example.Exception;
+package org.example.Controller;
 
-import org.example.Exception.AuthorNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<String> handleAuthorNotFoundException(AuthorNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+        return new ResponseEntity<>("Unauthorized: Invalid or missing token", HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(QuestionNotFoundException.class)
-    public ResponseEntity<String> handleQuestionNotFoundException(QuestionNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+        return new ResponseEntity<>("Access Denied: You do not have permission to access this resource", HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(AnswerNotFoundException.class)
-    public ResponseEntity<String> handleAnswerNotFoundException(AnswerNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleGlobalException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    // Add other exception handlers if necessary
 }

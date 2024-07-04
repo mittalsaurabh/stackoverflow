@@ -2,8 +2,11 @@ package org.example.Controller;
 
 import org.example.App.Facade;
 import org.example.Entity.Answer;
+import org.example.Entity.User;
 import org.example.Row.AnswerRow;
 import org.example.Row.VoteRequest;
+import org.example.Security.CustomUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

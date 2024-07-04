@@ -3,6 +3,8 @@ package org.example.Service;
 import org.example.Entity.User;
 import org.example.Exception.AuthorNotFoundException;
 import org.example.Repository.UserRepository;
+import org.example.Security.CustomUserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,11 +30,9 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User validateUser(long id) {
-        User author = getUserById(id);
-        if (author == null) {
-            throw new AuthorNotFoundException("Author not found by this id : " + id);
-        }
-        return author;
+    public User validateUser() {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userDetails.getUser();
+        return currentUser;
     }
 }

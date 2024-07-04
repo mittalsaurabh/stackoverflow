@@ -41,14 +41,14 @@ public class Facade {
 
 
     public Question addQuestion(QuestionRow question) throws AuthorNotFoundException {
-        User author = userService.validateUser(question.getAuthorId());
         List<Tag> tags = tagService.getTags(question.getTags());
+        User author = userService.validateUser();
         return questionService.addQuestion(question, author, tags);
     }
 
     public Question updateQuestion(Long questionId, QuestionRow question) {
-        User author = userService.validateUser(question.getAuthorId());
         List<Tag> tags = tagService.getTags(question.getTags());
+        User author = userService.validateUser();
         return questionService.updateQuestion(questionId, question, author, tags);
     }
 
@@ -59,13 +59,13 @@ public class Facade {
 
     public Answer addAnswer(AnswerRow answer) throws QuestionNotFoundException, AuthorNotFoundException{
         Question question = questionService.validateQuestion(answer.getQuestionId());
-        User author = userService.validateUser(answer.getAuthorId());
+        User author = userService.validateUser();
         Answer newAnswer = new Answer(answer.getText(), author, question, answer.getMedia());
         return answerService.addAnswer(newAnswer);
     }
 
     public Comment addComment(CommentRow comment) {
-        User author = userService.validateUser(comment.getAuthorId());
+        User author = userService.validateUser();
         if (comment.getQuestionId() != null) {
             Question question = questionService.validateQuestion(comment.getQuestionId());
             return commentService.addCommentOnQuestion(comment, author, question);
@@ -74,15 +74,14 @@ public class Facade {
         return commentService.addCommentOnAnswer(comment, author, answer);
     }
 
-    public Question voteQuestion(Long id, VoteRequest voteRequest) {
-        User user = userService.validateUser(voteRequest.getUserId());
+    public Question voteQuestion(Long id,  VoteRequest voteRequest ) {
+        User user = userService.validateUser();
         return questionService.voteQuestion(id, user, voteRequest);
     }
 
     public Answer voteAnswer(Long id, VoteRequest voteRequest) {
         Answer answer = answerService.validateAnswer(id);
-        User user = userService.validateUser(voteRequest.getUserId());
-
+        User user = userService.validateUser();
         return answerService.voteAnswer(answer, user, voteRequest.getVoteType());
     }
 

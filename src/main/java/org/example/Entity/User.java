@@ -1,6 +1,7 @@
 package org.example.Entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
@@ -12,15 +13,27 @@ public class User {
 
     private String name;
     private String displayName;
+
+    @Column(unique = true)
     private String email;
 
-    public User() {
-    }
+    private String password;
 
-    public User(String name, String displayName, String email) {
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
+
+
+
+    public User(String name, String displayName, String email, String password, Set<String> roles) {
         this.name = name;
         this.displayName = displayName;
         this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public User(){
+
     }
 
     public Long getId() {
@@ -53,5 +66,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }
